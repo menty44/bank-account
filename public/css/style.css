@@ -1,0 +1,54 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Mar 7, 2017, 1:45:49 PM
+    Author     : raiomido
+*/
+
+
+.navbar-default {
+    background: #129FEA;
+    color: #fff;
+}
+
+.navbar-default .navbar-brand {
+    color: #fff;
+    cursor: pointer;
+}
+
+.navbar-default .navbar-nav>li>a,.navbar-default .navbar-nav>li>a:hover {
+    color: #fff;
+}
+.navbar-default .navbar-brand:hover {
+    color: #fff;
+}
+
+/**
+ PAGES
+**/
+
+
+.main-page {
+    background-color: #fff;
+    color: #636b6f;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 100;
+    margin: 0;    
+    padding: 20px;
+    margin-top: 70px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.center {
+    text-align: center;
+}
+ 
+.list-group-item:hover {
+    background: #f8f8f8;
+    cursor: pointer;
+}
