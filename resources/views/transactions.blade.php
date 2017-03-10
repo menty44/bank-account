@@ -1,6 +1,6 @@
 @extends('layouts.base')
 
-@section('title', 'All Transactions Balance')
+@section('title', 'All Your Previous Transactions')
 
 
 @section('content')
