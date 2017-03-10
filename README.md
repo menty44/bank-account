@@ -17,6 +17,24 @@ date (date) not timestamp
 created_at (timestamp)
 updated_at (timestamp)
 
+##Or simply run the folowing sql queries
+CREATE DATABASE IF NOT EXISTS `bank` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `bank`;
+
+CREATE TABLE IF NOT EXISTS `transactions` (
+  `id` int(6) NOT NULL AUTO_INCREMENT,
+  `amount` decimal(10,2) NOT NULL,
+  `type` smallint(1) NOT NULL,
+  `count` smallint(1) NOT NULL,
+  `date` date NOT NULL,
+  `count` SMALLINT(1) NOT NULL
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`transaction_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+GRANT ALL PRIVILEGES ON `bank`.* TO 'bankadmin'@'localhost' WITH GRANT OPTION;
+
 Then update the .env file in the project root.
 If using virtual hosts, you might want to specify the root folder as appdirectory/public
 ```
