@@ -19,6 +19,11 @@ updated_at (timestamp)
 ###Or simply run the folowing sql queries
 ```
 CREATE DATABASE IF NOT EXISTS `bank` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+
+CREATE USER 'bankadmin'@'localhost' IDENTIFIED BY PASSWORD 'hackerGuru2017';
+
+GRANT ALL PRIVILEGES ON `bank`.* TO 'bankadmin'@'localhost' WITH GRANT OPTION;
+
 USE `bank`;
 
 CREATE TABLE IF NOT EXISTS `transactions` (
@@ -32,7 +37,6 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   PRIMARY KEY (`transaction_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-GRANT ALL PRIVILEGES ON `bank`.* TO 'bankadmin'@'localhost' WITH GRANT OPTION;
 ```
 Update the .env file in the project root with your database credentials if you used something different.
 
