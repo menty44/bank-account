@@ -54,14 +54,8 @@ class TransactionController extends Controller {
             $count = (int) $validate['count'];
             $count += 1;
             $save = $this->saveToDb((float) $amount, $this->deposit, $count, $date);
-
-            if ($save['status'] === 'success') {
-                $msg = array('success' => "Amount Deposited Successfully");
-                return response()->view('manage', $msg, 200)->header('Content-Type', '');
-            } else {
-                $msg = array('info' => $save['message']);
-                return response()->view('manage', $msg, 200)->header('Content-Type', '');
-            }
+            $msg = ($save['status'] === 'success') ? array('success' => "Amount Deposited Successfully") : array('info' => $save['message']);
+            return response()->view('manage', $msg, 200)->header('Content-Type', '');
         } else {
             $arr1 = array('info' => "Sorry. You have exceeded the maximum number of deposits for today. Try again tomorrow");
             return response()->view('manage', $arr1, 200)->header('Content-Type', '');
@@ -96,12 +90,8 @@ class TransactionController extends Controller {
     private function pullBalance($date = Null, $type = Null) {
         if ($date && $type) {
             $today = Carbon::parse($date)->toDateString();
-            $timeDiff = (strtotime($date)) - (strtotime($today));
-            if ($timeDiff < 1) {
-                $amounts = DB::table('transactions')->where('type', $type)->where('date', $today)->pluck('amount');
-            } else {
-                $amounts = DB::table('transactions')->pluck('amount');
-            }
+            $timeDiff = (strtotime($date)) - (strtotime($today));           
+            $amounts = ($timeDiff < 1) ? DB::table('transactions')->where('type', $type)->where('date', $today)->pluck('amount') : DB::table('transactions')->pluck('amount');
         } else {
             $amounts = DB::table('transactions')->pluck('amount');
         }
@@ -213,13 +203,8 @@ class TransactionController extends Controller {
         }
 
         $timeDiff = $today->diffInHours($lastDate);
-        if (($timeDiff < 24) && ($count < $max)) {
-            $data = array('status' => true, 'count' => $count);
-            return $data;
-        } else {
-            $data = array('status' => false, 'count' => $count);
-            return $data;
-        }
+        $data = ($timeDiff < 24) && ($count < $max) ? array('status' => true, 'count' => $count) : $data = array('status' => false, 'count' => $count);
+        return $data;
     }
 
     /**
