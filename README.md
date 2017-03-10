@@ -6,9 +6,8 @@ The bank account manager application project I built for my coding test from Pez
 
 First, to see the application in action you will need to set up a database and configure the application as follows
 
-```
 Create a database called bank, with table transactions with the following columns
-
+```
 id - (an autoincreamenting id also set as primary key)
 amount (decimal 10,2)
 type (small integer) -an integer to specify whether deposit/withdrawal
@@ -16,8 +15,9 @@ count(small integer)increamented to determine if max allowed transactions
 date (date) not timestamp
 created_at (timestamp)
 updated_at (timestamp)
-
-##Or simply run the folowing sql queries
+```
+###Or simply run the folowing sql queries
+```
 CREATE DATABASE IF NOT EXISTS `bank` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
 USE `bank`;
 
@@ -34,10 +34,15 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 GRANT ALL PRIVILEGES ON `bank`.* TO 'bankadmin'@'localhost' WITH GRANT OPTION;
-
-Then update the .env file in the project root.
-If using virtual hosts, you might want to specify the root folder as appdirectory/public
 ```
+Update the .env file in the project root with your database credentials if you used something different.
+
+If using virtual hosts, you might want to specify the root folder as appdirectory/public
+Also ensure you update the app url correctly. e.g. on windows you might have
+```
+http://localhost/bank
+```
+
 ### Prerequisites
 
 The application stores data in a database
