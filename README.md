@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `type` smallint(1) NOT NULL,
   `count` smallint(1) NOT NULL,
   `date` date NOT NULL,
-  `count` SMALLINT(1) NOT NULL
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`transaction_id`)
