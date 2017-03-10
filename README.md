@@ -42,7 +42,7 @@ Update the .env file in the project root with your database credentials if you u
 
 If using virtual hosts, you might want to specify the root folder as appdirectory/public
 
-Also ensure you update the app url correctly. e.g. on windows you might have
+Also ensure you update the APP_URL correctly in the .env file. e.g. on windows you might have
 ```
 http://localhost/bank
 ```
