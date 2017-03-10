@@ -37,6 +37,7 @@ GRANT ALL PRIVILEGES ON `bank`.* TO 'bankadmin'@'localhost' WITH GRANT OPTION;
 Update the .env file in the project root with your database credentials if you used something different.
 
 If using virtual hosts, you might want to specify the root folder as appdirectory/public
+
 Also ensure you update the app url correctly. e.g. on windows you might have
 ```
 http://localhost/bank
@@ -44,7 +45,7 @@ http://localhost/bank
 
 ### Prerequisites
 
-The application stores data in a database
+The application stores data in a database.
 The database used is mysql.
 
 ## Built With
