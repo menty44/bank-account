@@ -1,21 +1,16 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 class TransactionController extends Controller {
-
     private $withdrawal = 1;
     private $deposit = 2;
     private $depositMax = 150000;
     private $withdrawMax = 40000;
     private $depositMaxPerTrx = 40000;
     private $withdrawalMaxPerTrx = 20000;
-
     /**
      * Display the bank account home page.
      *
@@ -25,7 +20,6 @@ class TransactionController extends Controller {
         $transactions = Transaction::all();
         return response()->view('manage', $transactions, 200)->header('Content-Type', '');
     }
-
     /**
      * Show the form for adding deposit to the bank.
      *
@@ -35,7 +29,6 @@ class TransactionController extends Controller {
         $data = array();
         return response()->view('deposit', $data, 200)->header('Content-Type', '');
     }
-
     /**
      * Adds Deposited money to the database.
      *
@@ -61,7 +54,6 @@ class TransactionController extends Controller {
             return response()->view('manage', $arr1, 200)->header('Content-Type', '');
         }
     }
-
     /**
      * Display the specified resource.
      *
@@ -72,7 +64,6 @@ class TransactionController extends Controller {
         $transactions = Transaction::all()->sortByDesc('created_at');
         return response()->view('transactions', array('transactions' => $transactions), 200)->header('Content-Type', '');
     }
-
     /**
      * Display the specified resource.
      *
@@ -81,12 +72,10 @@ class TransactionController extends Controller {
      */
     public function showBalance() {
         $money = $this->pullBalance();
-
         return response()
                         ->view('balance', array('balance' => $money, 'code' => 200))
                         ->header('Content-Type', '');
     }
-
     private function pullBalance($date = Null, $type = Null) {
         if ($date && $type) {
             $today = Carbon::parse($date)->toDateString();
@@ -95,7 +84,6 @@ class TransactionController extends Controller {
         } else {
             $amounts = DB::table('transactions')->pluck('amount');
         }
-
         $totalMoney = 0;
         if (!empty($amounts)) {
             foreach ($amounts as $amount) {
@@ -104,7 +92,6 @@ class TransactionController extends Controller {
         }
         return $totalMoney;
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -112,10 +99,8 @@ class TransactionController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit() {
-
         return view('withdraw');
     }
-
     /**
      * Updates database when money is withdrawn
      *
@@ -130,12 +115,10 @@ class TransactionController extends Controller {
         $balance = $this->pullBalance();
         $count = $validate['count'];
         $count += 1;
-
         if ($amount > $this->withdrawalMaxPerTrx) {
             $data = array('info' => "Sorry. You cannot withdraw more than &#x24;$this->withdrawalMaxPerTrx in one go. Please try again");
             return response()->view('withdraw', $data, 200)->header('Content-Type', '');
         }
-
         if (!empty($validate) && ($validate['status'] === true)) {
             if ($amount < $balance) {
                 $save = $this->saveToDb(-(int) $amount, $this->withdrawal, $count, $date);
@@ -149,7 +132,6 @@ class TransactionController extends Controller {
             return response()->view('manage', $arr3, 200)->header('Content-Type', '');
         }
     }
-
     /**
      * Save to database. Added to avoid repetition between withdrawals and deposits
      * @param type $amount
@@ -176,7 +158,6 @@ class TransactionController extends Controller {
         $data = array('status' => 'success');
         return $data;
     }
-
     /**
      * Checks if max allowed time for deposits or withdrawals is exceeded
      * @param type $type
@@ -186,28 +167,23 @@ class TransactionController extends Controller {
         if ($type === $this->deposit) {
             $max = (int) 4;
         }
-
         if ($type === $this->withdrawal) {
             $max = (int) 3;
         }
-
         $today = Carbon::now('Africa/Nairobi');
         $lastRow = DB::table('transactions')->where('type', $type)->orderBy('id', 'desc')->first();
-
         if (!empty($lastRow)) {
             $lastRowArray = get_object_vars($lastRow);
             $count = $lastRowArray['count'];
-            $lastDate = Carbon::parse($lastRowArray['created_at'])->toDateString();
+            $lastDate = Carbon::parse($lastRowArray['created_at']);
         } else {
             $lastDate = $today;
             $count = 0;
         }
-
         $timeDiff = $today->diffInHours($lastDate);
         $data = ($timeDiff < 24) && ($count < $max) ? array('status' => true, 'count' => $count) : $data = array('status' => false, 'count' => $count);
         return $data;
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -217,5 +193,4 @@ class TransactionController extends Controller {
     public function destroy($id) {
         //
     }
-
 }
