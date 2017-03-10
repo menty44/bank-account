@@ -69,7 +69,7 @@ class TransactionController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function show() {
-        $transactions = Transaction::all();
+        $transactions = Transaction::all()->sortByDesc('created_at');
         return response()->view('transactions', array('transactions' => $transactions), 200)->header('Content-Type', '');
     }
 
