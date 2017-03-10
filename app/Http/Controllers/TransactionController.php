@@ -196,10 +196,11 @@ class TransactionController extends Controller {
 
         if (!empty($lastRow)) {
             $lastRowArray = get_object_vars($lastRow);
-            $lastDate = Carbon::parse($lastRowArray['created_at']);
-            $count = ($today->toDateString() === $lastDate->toDateString() ? $lastRowArray['count'] : 0);
+            $count = $lastRowArray['count'];
+            $lastDate = Carbon::parse($lastRowArray['created_at'])->toDateString();
         } else {
             $lastDate = $today;
+            $count = 0;
         }
 
         $timeDiff = $today->diffInHours($lastDate);
