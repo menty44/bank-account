@@ -171,11 +171,12 @@ class TransactionController extends Controller {
             $max = (int) 3;
         }
         $today = Carbon::now('Africa/Nairobi');
-        $lastRow = DB::table('transactions')->where('type', $type)->orderBy('id', 'desc')->first();
+        $lastRow = DB::table('transactions')->where('type', 2)->orderBy('id', 'desc')->first();
         if (!empty($lastRow)) {
             $lastRowArray = get_object_vars($lastRow);
-            $count = $lastRowArray['count'];
+            
             $lastDate = Carbon::parse($lastRowArray['created_at']);
+            $count = ($lastDate === $today) ? $count = $lastRowArray['count'] : 0;
         } else {
             $lastDate = $today;
             $count = 0;
