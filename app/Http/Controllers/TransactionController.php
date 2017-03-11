@@ -176,13 +176,13 @@ class TransactionController extends Controller {
             $lastRowArray = get_object_vars($lastRow);
             
             $lastDate = Carbon::parse($lastRowArray['created_at']);
-            $count = ($lastDate === $today) ? $count = $lastRowArray['count'] : 0;
+            $timeDiff = $today->diffInDays($lastDate);
+            $count = ($timeDiff < 1) ? $lastRowArray['count'] : 0;
         } else {
             $lastDate = $today;
             $count = 0;
         }
-        $timeDiff = $today->diffInDays($lastDate);
-        $data = ($timeDiff < 24) && ($count < $max) ? array('status' => true, 'count' => $count) : $data = array('status' => false, 'count' => $count);
+        $data = ($timeDiff < 1) && ($count < $max) ? array('status' => true, 'count' => $count) : $data = array('status' => false, 'count' => $count);
         return $data;
     }
     /**
