@@ -38,7 +38,8 @@ class TransactionController extends Controller {
     public function store(Request $request) {
         $date = Carbon::now()->toDateString();
         $validate = $this->checkTimeout($this->deposit);
-        $amount = abs($request->input('amount'));
+        $this->validate($request, ['amount'=>'required|integer|size:1']);
+        $amount = abs($request->input('amount'));       
         if ($amount > $this->depositMaxPerTrx) {
             $arr = array('info' => "Sorry. You cannot deposit more than &#x24;$this->depositMaxPerTrx in one go. Please try again");
             return response()->view('deposit', $arr, 200)->header('Content-Type', '');
@@ -110,8 +111,9 @@ class TransactionController extends Controller {
      */
     public function update(Request $request) {
         $validate = $this->checkTimeout($this->withdrawal);
-        $date = Carbon::now('Africa/Nairobi')->toDateString();
-        $amount = $request->input('amount');
+        $date = Carbon::now('Africa/Nairobi')->toDateString();       
+        $this->validate($request, ['amount'=>'required|integer|min:1']);
+        $amount = abs($request->input('amount'));
         $balance = $this->pullBalance();
         $count = $validate['count'];
         $count += 1;
@@ -125,7 +127,7 @@ class TransactionController extends Controller {
                 $array = ($save['status'] === 'success') ? array('success' => "You have successfully withdrawn &#x24; $amount from your bank account") : array('info', $save['message']);
                 return response()->view('manage', $array, 200)->header('Content-Type', '');
             } else {
-                return response()->view('withdraw', array('error' => "Insuffient account balance to withdraw &#x24; $amount"), 200)->header('Content-Type', '');
+                return response()->view('withdraw', array('info' => "Insuffient account balance to withdraw &#x24; $amount"), 200)->header('Content-Type', '');
             }
         } else {
             $arr3 = array('info'=> "Sorry. You have exceeded the maximum number of allowed withdrawals for today. Try again tomorrow");
@@ -187,12 +189,28 @@ class TransactionController extends Controller {
         return $data;
     }
     /**
-     * Testing the above functions. To access, go to hostname/api
+     * Write here code for testing the above functions
+     * To access, go to hostname/api
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function test() {
- 
+        //Testing checkTimeout Function
+        $today = Carbon::now('Africa/Nairobi')->day;
+        $lastRow = DB::table('transactions')->where('type', 2)->orderBy('id', 'desc')->first();
+        if (!empty($lastRow)) {
+            $lastRowArray = get_object_vars($lastRow);
+            
+            $lastDate = Carbon::parse($lastRowArray['created_at'])->day;
+            $timeDiff = $today - $lastDate;
+            $count = ($timeDiff < 1) ? $lastRowArray['count'] : 0;
+        } else {
+            $timeDiff = 0;
+            $lastDate = $today;
+            $count = 0;
+        }
+        
+        return "$timeDiff, $count, $lastDate, $today";
     }
 }
