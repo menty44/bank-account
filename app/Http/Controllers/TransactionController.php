@@ -170,28 +170,29 @@ class TransactionController extends Controller {
         if ($type === $this->withdrawal) {
             $max = (int) 3;
         }
-        $today = Carbon::now('Africa/Nairobi');
-        $lastRow = DB::table('transactions')->where('type', 2)->orderBy('id', 'desc')->first();
+        $today = Carbon::now('Africa/Nairobi')->day;
+        $lastRow = DB::table('transactions')->where('type', $type)->orderBy('id', 'desc')->first();
         if (!empty($lastRow)) {
             $lastRowArray = get_object_vars($lastRow);
-            
-            $lastDate = Carbon::parse($lastRowArray['created_at']);
-            $timeDiff = $today->diffInDays($lastDate);
+            $lastDate = Carbon::parse($lastRowArray['created_at'])->day;
+            $timeDiff = $today - $lastDate;
             $count = ($timeDiff < 1) ? $lastRowArray['count'] : 0;
         } else {
+            $timeDiff = 0;
             $lastDate = $today;
             $count = 0;
         }
-        $data = ($timeDiff < 1) && ($count < $max) ? array('status' => true, 'count' => $count) : $data = array('status' => false, 'count' => $count);
+        
+        $data = ($count < $max) ? array('status' => true, 'count' => $count) : array('status' => false, 'count' => $count);
         return $data;
     }
     /**
-     * Remove the specified resource from storage.
+     * Testing the above functions. To access, go to hostname/api
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id) {
-        //
+    public function test() {
+ 
     }
 }
