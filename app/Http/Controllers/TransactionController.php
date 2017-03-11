@@ -180,7 +180,7 @@ class TransactionController extends Controller {
             $lastDate = $today;
             $count = 0;
         }
-        $timeDiff = $today->diffInHours($lastDate);
+        $timeDiff = $today->diffInDays($lastDate);
         $data = ($timeDiff < 24) && ($count < $max) ? array('status' => true, 'count' => $count) : $data = array('status' => false, 'count' => $count);
         return $data;
     }
