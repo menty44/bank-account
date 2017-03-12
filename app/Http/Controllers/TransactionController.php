@@ -38,7 +38,7 @@ class TransactionController extends Controller {
     public function store(Request $request) {
         $date = Carbon::now()->toDateString();
         $validate = $this->checkTimeout($this->deposit);
-        $this->validate($request, ['amount'=>'required|integer|size:1']);
+        $this->validate($request, ['amount'=>'required|integer|min:1']);
         $amount = abs($request->input('amount'));       
         if ($amount > $this->depositMaxPerTrx) {
             $arr = array('info' => "Sorry. You cannot deposit more than &#x24;$this->depositMaxPerTrx in one go. Please try again");
