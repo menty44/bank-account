@@ -172,12 +172,12 @@ class TransactionController extends Controller {
         if ($type === $this->withdrawal) {
             $max = (int) 3;
         }
-        $today = Carbon::now('Africa/Nairobi')->dayOfYear;
+        $today = Carbon::now('Africa/Nairobi');
         $lastRow = DB::table('transactions')->where('type', $type)->orderBy('id', 'desc')->first();
         if (!empty($lastRow)) {
             $lastRowArray = get_object_vars($lastRow);
-            $lastDate = Carbon::parse($lastRowArray['created_at'])->dayOfYear;
-            $timeDiff = $today - $lastDate;
+            $lastDate = Carbon::parse($lastRowArray['created_at']);
+            $timeDiff = ($today->diffInYears($lastDate) >= 1) ? 1 : $today->dayOfYear - $lastDate->dayOfYear;  
             $count = ($timeDiff < 1) ? $lastRowArray['count'] : 0;
         } else {
             $timeDiff = 0;
@@ -197,20 +197,18 @@ class TransactionController extends Controller {
      */
     public function test() {
         //Testing checkTimeout Function
-        $today = Carbon::now('Africa/Nairobi')->dayOfYear;
+        $today = Carbon::now('Africa/Nairobi');
         $lastRow = DB::table('transactions')->where('type', 2)->orderBy('id', 'desc')->first();
         if (!empty($lastRow)) {
             $lastRowArray = get_object_vars($lastRow);
-            
-            $lastDate = Carbon::parse($lastRowArray['created_at'])->dayOfYear;
-            $timeDiff = $today - $lastDate;
+            $lastDate = Carbon::parse($lastRowArray['created_at']);
+            $timeDiff = ($today->diffInYears($lastDate) >= 1) ? 1 : $today->dayOfYear - $lastDate->dayOfYear; 
             $count = ($timeDiff < 1) ? $lastRowArray['count'] : 0;
         } else {
             $timeDiff = 0;
             $lastDate = $today;
             $count = 0;
         }
-        
-        return "$timeDiff, $count, $lastDate, $today";
+        return "$timeDiff, $count, $lastDate, $today, ".($today->diffInYears($lastDate));
     }
 }
