@@ -26,18 +26,23 @@
         </nav>        
         <div class="container">
             <div class="main-page">  
+                @if (count($errors) > 0) <!--Validation Errors-->
+                    <div class="alert alert-danger alert-dismissable">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Error!</strong> {{ $error }}
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif                
                 @if(isset($success))
                 <div class="alert alert-success alert-dismissable">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                     <strong>Success!</strong> {{ $success }}
                 </div>
                 @endif
-                @if(isset($error))
-                <div class="alert alert-danger alert-dismissable">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Error!</strong> {{ $error }}
-                </div>
-                @endif
+
                 @if(isset($info))
                 <div class="alert alert-info alert-dismissable">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
